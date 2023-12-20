@@ -4,6 +4,14 @@ import {nanoid} from "nanoid"
 
 const App = () => {
     const [dice,setDice] = React.useState(diceNumArray)
+    const [tenzies, setTenzies] = React.useState(false)
+
+    React.useEffect(() => {
+        const win = dice.every(die => {
+            return die.value === dice[0].value && die.isHeld
+        })
+        setTenzies(win)
+    },[dice])
     function diceNumArray(){
         const numArray= []
         for(let i =0;i<10;i++){
@@ -46,9 +54,14 @@ const App = () => {
     return (
         <main className={"main-section"}>
             <div className={"container"}>
-                {diceElement}
+                <h1 className="title">Tenzies</h1>
+                <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current
+                    value between rolls.</p>
+                <div className={"dice-container"}>
+                    {diceElement}
+                </div>
+                <button onClick={rollDice} className={"roll-btn"}>{tenzies?"Play Again":"Roll"}</button>
             </div>
-            <button onClick={rollDice} className={"roll-btn"}>Roll</button>
         </main>
     );
 };
