@@ -27,7 +27,7 @@ const App = () => {
         }
         return numArray
     }
-    const diceElement = dice.map(die=> {
+    const diceElement = dice.map(die=>{
         return <Dice
             handleClick={() => {
                 toggleHold(die.id)
