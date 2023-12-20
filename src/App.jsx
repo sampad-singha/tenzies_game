@@ -1,17 +1,21 @@
 import Dice from "./components/Dice.jsx";
-import React from "react";
+import React, {useEffect} from "react";
 import {nanoid} from "nanoid"
+import Confetti from 'react-confetti'
 
 const App = () => {
     const [dice,setDice] = React.useState(diceNumArray)
     const [tenzies, setTenzies] = React.useState(false)
 
-    React.useEffect(() => {
+    useEffect(() => {
         const win = dice.every(die => {
             return die.value === dice[0].value && die.isHeld
         })
         setTenzies(win)
     },[dice])
+
+    useEffect(() => {
+    }, [tenzies]);
     function diceNumArray(){
         const numArray= []
         for(let i =0;i<10;i++){
@@ -44,23 +48,37 @@ const App = () => {
         })
     }
     function rollDice(){
-        setDice((prevState) => {
-            const tempArray = diceNumArray()
-            return prevState.map((die, index) => {
-                return die.isHeld ? {...die} : {...die, value: tempArray[index].value}
+        if(tenzies){
+            setTenzies(false)
+            setDice(diceNumArray)
+        }else{
+            setDice((prevState) => {
+                const tempArray = diceNumArray()
+                return prevState.map((die, index) => {
+                    return die.isHeld ? {...die} : {...die, value: tempArray[index].value}
+                })
             })
-        })
+        }
     }
     return (
         <main className={"main-section"}>
+            {tenzies && <Confetti
+                // height={""}
+            />}
             <div className={"container"}>
-                <h1 className="title">Tenzies</h1>
-                <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current
-                    value between rolls.</p>
+                {tenzies ?
+                    <div className={"info"}><h1 className={"win"}>You Won!</h1></div> :
+                    <div className={"info"}>
+                    <h1 className="title">Tenzies</h1>
+                        <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its
+                            current
+                            value between rolls.</p>
+                    </div>
+                }
                 <div className={"dice-container"}>
                     {diceElement}
                 </div>
-                <button onClick={rollDice} className={"roll-btn"}>{tenzies?"Play Again":"Roll"}</button>
+                <button onClick={rollDice} className={"roll-btn"}>{tenzies ? "Play Again" : "Roll"}</button>
             </div>
         </main>
     );
