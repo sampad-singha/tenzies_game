@@ -70,6 +70,16 @@ body{
 
 
 }
+.roll-count{
+    text-align: center;
+    font-family: Karla,sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.768px;
+    color: #2B283A;
+}
 .dice-container{
     display: grid;
     grid-template: auto auto / repeat(5, 1fr);

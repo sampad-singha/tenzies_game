@@ -1,11 +1,12 @@
 import Dice from "./components/Dice.jsx";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {nanoid} from "nanoid"
 import Confetti from 'react-confetti'
 
 const App = () => {
     const [dice,setDice] = React.useState(diceNumArray)
     const [tenzies, setTenzies] = React.useState(false)
+    const [clickCount, setClickCount] = useState(0)
 
     useEffect(() => {
         const win = dice.every(die => {
@@ -51,6 +52,7 @@ const App = () => {
         if(tenzies){
             setTenzies(false)
             setDice(diceNumArray)
+            setClickCount(0)
         }else{
             setDice((prevState) => {
                 const tempArray = diceNumArray()
@@ -58,6 +60,7 @@ const App = () => {
                     return die.isHeld ? {...die} : {...die, value: tempArray[index].value}
                 })
             })
+            setClickCount(prevState => (prevState+1))
         }
     }
     return (
@@ -67,7 +70,10 @@ const App = () => {
             />}
             <div className={"container"}>
                 {tenzies ?
-                    <div className={"info"}><h1 className={"win"}>You Won!</h1></div> :
+                    <div className={"info"}>
+                        <h1 className={"win"}>You Won!</h1>
+                        <p className={"roll-count"}>Rolls: {clickCount}</p>
+                    </div> :
                     <div className={"info"}>
                     <h1 className="title">Tenzies</h1>
                         <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its
